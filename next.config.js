@@ -5,13 +5,13 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ['your-image-hosting-domain.com'], // Replace with your actual domain
+    domains: ['a_x.__.nmemories.com'], // Your domain
   },
   async rewrites() {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://your-backend-domain.com/api/:path*', // Replace with your actual backend URL
+        destination: 'https://api.a_x.__.nmemories.com/api/:path*', // Assuming API is on the same domain
       },
     ]
   },
