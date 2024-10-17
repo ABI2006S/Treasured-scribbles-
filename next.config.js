@@ -5,13 +5,13 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ['localhost'],
+    domains: ['your-image-hosting-domain.com'], // Replace with your actual domain
   },
   async rewrites() {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:3001/api/:path*', // Proxy to Backend
+        destination: 'https://your-backend-domain.com/api/:path*', // Replace with your actual backend URL
       },
     ]
   },
