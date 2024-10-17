@@ -1,0 +1,92 @@
+'use client'
+
+import { useState, useRef } from 'react'
+import { useForm } from 'react-hook-form'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import SignatureCanvas from 'react-signature-canvas'
+
+interface AutographFormData {
+  name: string
+  message: string
+}
+
+export default function AutographEntryForm() {
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<AutographFormData>()
+  const [signature, setSignature] = useState<string | null>(null)
+  const signatureRef = useRef<SignatureCanvas>(null)
+
+  const onSubmit = async (data: AutographFormData) => {
+    if (signature) {
+      try {
+        const response = await fetch('/api/autographs', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...data, signature }),
+        })
+
+        if (response.ok) {
+          alert('Autograph submitted successfully!')
+          reset()
+          clearSignature()
+        } else {
+          alert('Failed to submit autograph. Please try again.')
+        }
+      } catch (error) {
+        console.error('Error submitting autograph:', error)
+        alert('An error occurred. Please try again.')
+      }
+    } else {
+      alert('Please provide a signature')
+    }
+  }
+
+  const clearSignature = () => {
+    signatureRef.current?.clear()
+    setSignature(null)
+  }
+
+  return (
+    <Card className="w-full max-w-2xl">
+      <CardHeader>
+        <CardTitle>Leave Your Autograph</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <Input
+            {...register('name', { required: 'Name is required' })}
+            placeholder="Your Name"
+          />
+          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+
+          <Textarea
+            {...register('message', { required: 'Message is required' })}
+            placeholder="Your Message"
+            rows={4}
+          />
+          {errors.message && <p className="text-red-500">{errors.message.message}</p>}
+
+          <div className="border border-gray-300 rounded-md p-2">
+            <SignatureCanvas
+              ref={signatureRef}
+              onEnd={() => setSignature(signatureRef.current?.toDataURL())}
+              canvasProps={{
+                className: 'w-full h-40 border border-gray-200 rounded-md',
+              }}
+            />
+          </div>
+          <div className="flex justify-end space-x-2">
+            <Button type="button" variant="outline" onClick={clearSignature}>
+              Clear Signature
+            </Button>
+            <Button type="submit">Submit Autograph</Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  )
+}

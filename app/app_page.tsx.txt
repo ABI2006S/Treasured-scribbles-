@@ -1,0 +1,67 @@
+'use client'
+
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { BookOpenIcon, PenIcon } from 'lucide-react'
+import PasswordProtection from '@/components/PasswordProtection'
+import AutographEntryForm from '@/components/AutographEntryForm'
+import AutographDisplay from '@/components/AutographDisplay'
+
+export default function Home() {
+  const [writeAccess, setWriteAccess] = useState(false)
+  const [readAccess, setReadAccess] = useState(false)
+  const [showWritePassword, setShowWritePassword] = useState(false)
+  const [showReadPassword, setShowReadPassword] = useState(false)
+
+  const handleWriteAccess = () => {
+    setWriteAccess(true)
+    setShowWritePassword(false)
+  }
+
+  const handleReadAccess = () => {
+    setReadAccess(true)
+    setShowReadPassword(false)
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/vintage-diary-texture.jpg')" }}>
+      <Card className="w-full max-w-md bg-opacity-80 backdrop-blur-sm">
+        <CardContent className="flex flex-col items-center p-6 space-y-6">
+          <motion.h1
+            className="text-4xl font-bold text-primary"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, type: 'spring' }}
+          >
+            Treasured Scribbles
+          </motion.h1>
+          <p className="text-center text-muted-foreground">
+            Hi 👋🏻 from Abin, feel free to add any memories or writings to the Treasured Scribbles.
+          </p>
+          {!writeAccess && !readAccess && (
+            <div className="flex space-x-4">
+              <Button variant="outline" className="flex items-center space-x-2" onClick={() => setShowWritePassword(true)}>
+                <PenIcon className="w-4 h-4" />
+                <span>Write</span>
+              </Button>
+              <Button variant="outline" className="flex items-center space-x-2" onClick={() => setShowReadPassword(true)}>
+                <BookOpenIcon className="w-4 h-4" />
+                <span>View</span>
+              </Button>
+            </div>
+          )}
+          {showWritePassword && (
+            <PasswordProtection type="write" onSubmit={handleWriteAccess} />
+          )}
+          {showReadPassword && (
+            <PasswordProtection type="read" onSubmit={handleReadAccess} />
+          )}
+          {writeAccess && <AutographEntryForm />}
+          {readAccess && <AutographDisplay />}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
