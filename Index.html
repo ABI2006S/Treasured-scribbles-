@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treasured Scribbles</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .vintage-bg {
+            background-image: url('/vintage-diary-texture.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .signature-pad {
+            border: 2px solid #d1d5db;
+            border-radius: 0.5rem;
+        }
+        .autograph-card {
+            transition: all 0.3s ease;
+        }
+        .autograph-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="vintage-bg min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md bg-white bg-opacity-80 backdrop-blur-sm rounded-lg shadow-xl p-6 space-y-6">
+        <h1 class="text-4xl font-bold text-center text-gray-800 animate-fade-in">Treasured Scribbles</h1>
+        <p class="text-center text-gray-600">
+            Hi 👋🏻 from Abin, feel free to add any memories or writings to the Treasured Scribbles.
+        </p>
+        
+        <!-- Password Protection -->
+        <div id="password-protection" class="space-y-4">
+            <div class="flex space-x-4 justify-center">
+                <button id="write-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                    </svg>
+                    <span>Write</span>
+                </button>
+                <button id="read-button" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                    </svg>
+                    <span>View</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Write Password Input -->
+        <div id="write-password" class="hidden space-y-4">
+            <h2 class="text-2xl font-bold text-center">Enter Write Password</h2>
+            <input type="password" id="write-password-input" class="w-full px-3 py-2 border rounded-md" placeholder="Enter write password">
+            <button id="submit-write-password" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Submit
+            </button>
+            <p id="write-password-error" class="text-red-500 text-center hidden">Invalid password. Please try again.</p>
+        </div>
+
+        <!-- Read Password Input -->
+        <div id="read-password" class="hidden space-y-4">
+            <h2 class="text-2xl font-bold text-center">Enter Read Password</h2>
+            <input type="password" id="read-password-input" class="w-full px-3 py-2 border rounded-md" placeholder="Enter read password">
+            <button id="submit-read-password" class="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Submit
+            </button>
+            <p id="read-password-error" class="text-red-500 text-center hidden">Invalid password. Please try again.</p>
+        </div>
+
+        <!-- Autograph Entry Form -->
+        <div id="autograph-form" class="hidden space-y-4">
+            <h2 class="text-2xl font-bold text-center">Leave Your Autograph</h2>
+            <form class="space-y-4">
+                <input type="text" placeholder="Your Name" class="w-full px-3 py-2 border rounded-md" required>
+                <textarea placeholder="Your Message" rows="4" class="w-full px-3 py-2 border rounded-md" required></textarea>
+                <div class="signature-pad w-full h-40 bg-white"></div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+                        Clear Signature
+                    </button>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Submit Autograph
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Autograph Display -->
+        <div id="autograph-display" class="hidden space-y-4">
+            <h2 class="text-2xl font-bold text-center">Autographs</h2>
+            <div class="space-y-4">
+                <!-- Sample Autograph Card -->
+                <div class="autograph-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-xl font-bold">John Doe</h3>
+                    <p class="mt-2">This is a sample autograph message. Treasured memories live here!</p>
+                    <img src="sample-signature.png" alt="John Doe's signature" class="mt-2 max-w-full h-auto">
+                    <p class="text-sm text-gray-500 mt-2">Signed on: May 17, 2023</p>
+                </div>
+                <!-- More autograph cards would be dynamically added here -->
+            </div>
+            <button class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Load More
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const writeButton = document.getElementById('write-button');
+            const readButton = document.getElementById('read-button');
+            const passwordProtection = document.getElementById('password-protection');
+            const writePassword = document.getElementById('write-password');
+            const readPassword = document.getElementById('read-password');
+            const autographForm = document.getElementById('autograph-form');
+            const autographDisplay = document.getElementById('autograph-display');
+            const submitWritePassword = document.getElementById('submit-write-password');
+            const submitReadPassword = document.getElementById('submit-read-password');
+            const writePasswordInput = document.getElementById('write-password-input');
+            const readPasswordInput = document.getElementById('read-password-input');
+            const writePasswordError = document.getElementById('write-password-error');
+            const readPasswordError = document.getElementById('read-password-error');
+
+            const correctWritePassword = 'Treasured123';
+            const correctReadPassword = 'ABIN1JOHN';
+
+            writeButton.addEventListener('click', function() {
+                passwordProtection.classList.add('hidden');
+                writePassword.classList.remove('hidden');
+            });
+
+            readButton.addEventListener('click', function() {
+                passwordProtection.classList.add('hidden');
+                readPassword.classList.remove('hidden');
+            });
+
+            submitWritePassword.addEventListener('click', function() {
+                if (writePasswordInput.value === correctWritePassword) {
+                    writePassword.classList.add('hidden');
+                    autographForm.classList.remove('hidden');
+                    writePasswordError.classList.add('hidden');
+                } else {
+                    writePasswordError.classList.remove('hidden');
+                }
+            });
+
+            submitReadPassword.addEventListener('click', function() {
+                if (readPasswordInput.value === correctReadPassword) {
+                    readPassword.classList.add('hidden');
+                    autographDisplay.classList.remove('hidden');
+                    readPasswordError.classList.add('hidden');
+                } else {
+                    readPasswordError.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
